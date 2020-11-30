@@ -1,4 +1,2 @@
-(11/25/2020)  
-    - Created the basic method to parse our data set into a vector. Tested using smaller 
-      subset of original data  
-    - Created Makefile to compile
+# Week 1
+We submitted our contracts and goals, and we created a Makefile to compile. We also implemented a basic method to parse our data set into a vector. and a slightly more complex parsing method using the class Reddit to parse into a vector of Post objects. We tested these methods in main using a smaller subset of original data, found in data/small_data.tsv. The parsing method using the Reddit object only parses and stores the source subreddit, target subreddit, and post id, but we don't anticipate needing to store more information than that.
