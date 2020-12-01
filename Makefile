@@ -4,10 +4,10 @@ LD = clang++
 LDFLAGS = -std=c++1y -stdlib=libc++ -lc++abi -lm
 
 main : main.o
-	$(LD) main.o reddit.o $(LDFLAGS) -o main
+	$(LD) main.o reddit.o graph.o $(LDFLAGS) -o main
 
-main.o : main.cpp reddit.cpp
-	$(CXX) $(CXXFLAGS) main.cpp reddit.cpp
+main.o : main.cpp reddit.cpp graph.cpp
+	$(CXX) $(CXXFLAGS) main.cpp reddit.cpp graph.cpp
 
 clean :
-	rm main.o reddit.o main
+	rm main.o reddit.o main graph.o
