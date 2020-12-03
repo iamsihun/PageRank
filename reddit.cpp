@@ -17,6 +17,7 @@ void Reddit::ParseData(const std::string& data_file) {
         if (!g_.vertexExists(target)) {
             g_.insertVertex(target);
         }
+        
         if (!g_.edgeExists(source, target)) {
             g_.insertEdge(source, target);
             g_.setEdgeWeight(source, target, 1); 
