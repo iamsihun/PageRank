@@ -10,7 +10,7 @@ using namespace reddit;
 int main() {
   // These lines use the Reddit class to parse through the data
   Reddit r;
-  r.ParseData("data/test_data.tsv");
+  r.ParseData("data/dataAll_truncated_unique.tsv");
   r.PageRank();
   r.PrintData();
 
