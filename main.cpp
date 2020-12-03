@@ -1,5 +1,6 @@
 #include <fstream>
 #include <vector>
+#include <boost/algorithm/string.hpp>
 #include "reddit.h"
 
 using namespace std;
