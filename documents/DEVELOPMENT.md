@@ -1,2 +1,5 @@
 # Week 1
 We submitted our contracts and goals, and we created a Makefile to compile. We also implemented a basic method to parse our data set into a vector. and a slightly more complex parsing method using the class Reddit to parse into a vector of Post objects. We tested these methods in main using a smaller subset of original data, found in data/small_data.tsv. The parsing method using the Reddit object only parses and stores the source subreddit, target subreddit, and post id, but we don't anticipate needing to store more information than that.
+
+# Week 2
+We began working on implementing our PageRank algorithm and added a "flipped" version of our existing graph in order to help implement the algorithm. Upon implementing, we ran into a couple of issues, one of which had to do with the disconnectivity of our data set. We've discussed a couple of solutions including possibly adding artificial edges in order for the algorithm to work. 
