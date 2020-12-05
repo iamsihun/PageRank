@@ -29,7 +29,7 @@ class Reddit {
 
     Graph g_;
     Graph g_flipped_;
-    std::map<Vertex, double> pagerank_distr_;
+    std::vector<std::map<Vertex, double>> pagerank_distr_;
     std::vector<std::vector<Vertex>> connected_components_;
 };
 }
