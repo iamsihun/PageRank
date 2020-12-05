@@ -33,25 +33,34 @@ void Reddit::ParseData(const std::string& data_file) {
 }
 
 std::vector<Graph> Reddit::GetConnectedComponents() {
-    std::vector<bool> visited(g_.getVertices().size(), false);
-    for (unsigned int i = 0; i < g_.getVertices().size(); i++) {
-        if (!visited[i]) {
+    std::map<Vertex, bool> visited;
+    for (auto& vertex : g_.getVertices()) {
+        visited[vertex] = false;
+    }
+    for (auto& vertex : g_.getVertices()) {
+        if (!visited[vertex]) {
             Graph graph(false, true);
-            connected_components_.push_back(DFS(i, visited, graph));
+            connected_components_.push_back(DFS(vertex, visited, graph));
         }
     }
     return connected_components_;
 }
 
-Graph Reddit::DFS(int visited_idx, std::vector<bool>& visited, Graph& graph) {
-    visited[visited_idx] = true;
-    Vertex vertex = g_.getVertices()[visited_idx];
-    graph.insertVertex(vertex);
-    for (auto& adj : g_.getAdjacent(g_.getVertices()[visited_idx])) {
-        if (!visited[visited_idx]) {
+Graph Reddit::DFS(Vertex visited_vertex, std::map<Vertex, bool>& visited, Graph& graph) {
+    visited[visited_vertex] = true;
+    graph.insertVertex(visited_vertex);
+    for (auto& adj : g_.getAdjacent(visited_vertex)) {
+        if (!visited[visited_vertex]) {
             graph.insertVertex(adj);
-            graph.insertEdge(vertex, adj);
-            DFS(visited_idx, visited, graph);
+            graph.insertEdge(visited_vertex, adj);
+            DFS(visited_vertex, visited, graph);
+        }
+    }
+    for (auto& adj : g_flipped_.getAdjacent(visited_vertex)) {
+        if (!visited[visited_vertex]) {
+            graph.insertVertex(adj);
+            graph.insertEdge(adj, visited_vertex);
+            DFS(visited_vertex, visited, graph);
         }
     }
     return graph;

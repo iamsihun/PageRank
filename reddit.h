@@ -25,7 +25,7 @@ class Reddit {
     std::vector<Graph> GetConnectedComponents();
 
   private:
-    Graph DFS(int visited_idx, std::vector<bool>& visited, Graph& graph);
+    Graph DFS(Vertex visited_vertex, std::map<Vertex, bool>& visited, Graph& graph);
 
     Graph g_;
     Graph g_flipped_;
