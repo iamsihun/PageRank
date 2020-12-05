@@ -22,14 +22,14 @@ class Reddit {
     void ParseData(const std::string& data_file);
     void PrintData();
     void PageRank();
-    std::vector<Graph> GetConnectedComponents();
+    void FindConnectedComponents();
 
   private:
-    Graph DFS(Vertex visited_vertex, std::map<Vertex, bool>& visited, Graph& graph);
+    void DFS(Vertex visited_vertex, std::map<Vertex, bool>& visited, std::vector<Vertex>& connected);
 
     Graph g_;
     Graph g_flipped_;
     std::map<Vertex, double> pagerank_distr_;
-    std::vector<Graph> connected_components_;
+    std::vector<std::vector<Vertex>> connected_components_;
 };
 }

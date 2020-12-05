@@ -32,38 +32,33 @@ void Reddit::ParseData(const std::string& data_file) {
     file.close();
 }
 
-std::vector<Graph> Reddit::GetConnectedComponents() {
+void Reddit::FindConnectedComponents() {
     std::map<Vertex, bool> visited;
     for (auto& vertex : g_.getVertices()) {
         visited[vertex] = false;
     }
     for (auto& vertex : g_.getVertices()) {
         if (!visited[vertex]) {
-            Graph graph(false, true);
-            connected_components_.push_back(DFS(vertex, visited, graph));
+            std::vector<Vertex> connected;
+            DFS(vertex, visited, connected);
+            connected_components_.push_back(connected);
         }
     }
-    return connected_components_;
 }
 
-Graph Reddit::DFS(Vertex visited_vertex, std::map<Vertex, bool>& visited, Graph& graph) {
+void Reddit::DFS(Vertex visited_vertex, std::map<Vertex, bool>& visited, std::vector<Vertex>& connected) {
     visited[visited_vertex] = true;
-    graph.insertVertex(visited_vertex);
+    connected.push_back(visited_vertex);
     for (auto& adj : g_.getAdjacent(visited_vertex)) {
-        if (!visited[visited_vertex]) {
-            graph.insertVertex(adj);
-            graph.insertEdge(visited_vertex, adj);
-            DFS(visited_vertex, visited, graph);
+        if (!visited[adj]) {
+            DFS(adj, visited, connected);
         }
     }
     for (auto& adj : g_flipped_.getAdjacent(visited_vertex)) {
-        if (!visited[visited_vertex]) {
-            graph.insertVertex(adj);
-            graph.insertEdge(adj, visited_vertex);
-            DFS(visited_vertex, visited, graph);
+        if (!visited[adj]) {
+            DFS(adj, visited, connected);
         }
     }
-    return graph;
 }
 
 void Reddit::PageRank() {
@@ -90,7 +85,10 @@ void Reddit::PageRank() {
 void Reddit::PrintData() {
     for (unsigned int i = 0; i < connected_components_.size(); i++) {
         std::cout << i << std::endl;
-        connected_components_[i].print();
+        for (auto& comp : connected_components_[i]) {
+            std::cout << comp << " ";
+        }
+        std::cout << "\n";
     }
 }
 }
