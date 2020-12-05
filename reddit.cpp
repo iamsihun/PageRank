@@ -32,6 +32,31 @@ void Reddit::ParseData(const std::string& data_file) {
     file.close();
 }
 
+std::vector<Graph> Reddit::GetConnectedComponents() {
+    std::vector<bool> visited(g_.getVertices().size(), false);
+    for (unsigned int i = 0; i < g_.getVertices().size(); i++) {
+        if (!visited[i]) {
+            Graph graph(false, true);
+            connected_components_.push_back(DFS(i, visited, graph));
+        }
+    }
+    return connected_components_;
+}
+
+Graph Reddit::DFS(int visited_idx, std::vector<bool>& visited, Graph& graph) {
+    visited[visited_idx] = true;
+    Vertex vertex = g_.getVertices()[visited_idx];
+    graph.insertVertex(vertex);
+    for (auto& adj : g_.getAdjacent(g_.getVertices()[visited_idx])) {
+        if (!visited[visited_idx]) {
+            graph.insertVertex(adj);
+            graph.insertEdge(vertex, adj);
+            DFS(visited_idx, visited, graph);
+        }
+    }
+    return graph;
+}
+
 void Reddit::PageRank() {
     std::map<Vertex, double> init_distr;
     for (auto& vertex : g_.getVertices()) {
@@ -54,6 +79,9 @@ void Reddit::PageRank() {
 }
 
 void Reddit::PrintData() {
-    g_.print();
+    for (unsigned int i = 0; i < connected_components_.size(); i++) {
+        std::cout << i << std::endl;
+        connected_components_[i].print();
+    }
 }
 }
