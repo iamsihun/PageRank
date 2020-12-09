@@ -10,20 +10,25 @@ using namespace reddit;
 int main() {
   // These lines use the Reddit class to parse through the data
   Reddit r;
-  r.ParseData("data/mult_connected.tsv");
-  r.FindConnectedComponents();
-  r.PageRank();
+  r.ParseData("data/FW_test2.tsv");
+  //r.FindConnectedComponents();
+  //r.PageRank();
   // r.PrintData();
+  r.buildShortestPaths();
+  //r.printFW();
 
-  // ifstream file("data/small_data.tsv");           //load data into 'file'
-  // string line;                                    //holds each data entry
-  // while (getline(file, line)) {                   //extract each data entry into 'line'
-  //     vector<string> parts;                       /*'parts' holds the elements of each line i.e. 
-  //                                                   TARGET_SUBREDDIT (index 1) or 
-  //                                                   SOURCE_SUBREDDIT (index 0)    */
 
-  //     split(parts, line, boost::is_any_of("\t")); //parse data into parts
-  //   }
-  //   file.close();
+  /*
+  Vertex A;
+  Vertex C;
+  vector<Vertex> path = r.findPath(A, C);
+  if(!path.empty()) {
+      for(auto& vertex : path) {
+        cout << vertex << "->";
+      }
+      cout << endl;
+  }
+  else cout << "no path found" << endl;
+*/
   return 0;
 }

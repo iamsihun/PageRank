@@ -2,6 +2,12 @@
 
 namespace reddit {
 
+Reddit::~Reddit(){
+    delete[] minDist;
+    delete[] next;
+}
+
+
 void Reddit::ParseData(const std::string& data_file) {
     std::ifstream file(data_file);
     std::string line;
@@ -105,4 +111,107 @@ void Reddit::PrintData() {
         std::cout << "\n";
     }
 }
+
+void Reddit::printFW() {
+    int numVertices = (int)g_.getVertices().size();
+    for(Vertex i : g_.getVertices()) {
+            for(Vertex j : g_.getVertices()) {
+                    cout << i << "->" << j << endl;
+                    cout << "       " << minDist[vertextoInt[i]*numVertices+vertextoInt[j]] << endl;
+            }
+    }
 }
+
+
+void Reddit::buildShortestPaths() {
+    int numVertices = (int)g_.getVertices().size();  //get num of vertices
+    minDist = new int[numVertices*numVertices];  //init array to hold shortest distance values for each subreddit pair
+    next = new int[numVertices*numVertices];
+
+    //  INITIALIZING minDist & next
+    for(int i=0; i<numVertices*numVertices; i++) { 
+        minDist[i] = 999999999;                         //init each dist to infinity according to FW algorithm
+        next[i] = -1;                                   //init each value to null (-1 in this case) according to FW algorithm
+    }
+
+
+    //INITIALIZING vertextoInt
+    vector<Vertex> vertices = g_.getVertices();  //hold the vertices of graph in 'vertices'
+    for(int i=0; i<(int)vertices.size(); i++) {   //map each vertex to an int starting from 0
+            vertextoInt[vertices[i]] = i;
+    }
+    
+    //FW ALG 
+    for(auto& edge : g_.getEdges()) {    //populate dist with existing weights
+            Vertex source = edge.source;
+            Vertex dest = edge.dest;
+            int u = vertextoInt[source];
+            int v = vertextoInt[dest];
+            minDist[u*numVertices + v] = edge.getWeight();
+            next[u*numVertices + v] = v;
+    }
+
+    for(auto& vertex : vertices) {   //set distances to self to 0
+            int v = vertextoInt[vertex];
+            minDist[v*numVertices+v] = 0;
+            next[v*numVertices+v] = v;
+    }
+
+    for(int k=0; k<numVertices; k++) {
+        for(int i=0; i<numVertices; i++) {
+            for(int j=0; j<numVertices; j++) {
+                if(minDist[i*numVertices+j]   >   minDist[i*numVertices+k]   +  minDist[k*numVertices+j]) {
+                    minDist[i*numVertices+j]   =   minDist[i*numVertices+k]   +   minDist[k*numVertices+j];
+                    next[i*numVertices+j]  =  next[i*numVertices+k];
+                }
+            }
+        }
+    }
+
+    //for(int i=0; i<numVertices*numVertices; i++) cout << minDist[i] << endl;
+
+/*                 if dist[i][j] > dist[i][k] + dist[k][j] then
+                    dist[i][j] ← dist[i][k] + dist[k][j]
+                    next[i][j] ← next[i][k] */
+
+
+
+}
+
+
+int Reddit::shortestPath(Vertex source, Vertex dest) {
+    int numVertices = (int)g_.getVertices().size(); 
+    int input_source = vertextoInt[source];
+    int input_dest = vertextoInt[dest];
+    return minDist[numVertices*input_source + input_dest];
+}
+
+
+vector<Vertex> Reddit::findPath(Vertex source, Vertex dest) {
+    vector<Vertex> path_;
+    path_.clear();
+    int numVertices = (int)g_.getVertices().size(); 
+    int u = vertextoInt[source];
+    int v = vertextoInt[dest];
+    if(next[u*numVertices+v] == -1) {
+        return path_;
+    }
+    while(u != v) {
+        u = next[u*numVertices+v];
+        path_.push_back(g_.getVertices()[u]);
+    }
+    return path_; 
+}
+
+
+/* procedure Path(u, v)
+    if next[u][v] = null then
+        return []
+    path = [u]
+    while u ≠ v
+        u ← next[u][v]
+        path.append(u)
+    return path */
+
+
+}//EOF

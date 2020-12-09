@@ -3,3 +3,6 @@ We submitted our contracts and goals, and we created a Makefile to compile. We a
 
 # Week 2
 We began working on implementing our PageRank algorithm and added a "flipped" version of our existing graph in order to help implement the algorithm. Upon implementing, we ran into a couple of issues, one of which had to do with the disconnectivity of our data set. We've discussed a couple of solutions including possibly adding artificial edges in order for the algorithm to work. 
+
+
+- Implemented Floyd-Warshall algorithm to find the smallest distance between each pair of vertices
