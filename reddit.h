@@ -22,24 +22,34 @@ class Reddit {
 
     ~Reddit();
     void ParseData(const std::string& data_file);
+    void FWParseData(const std::string& data_file);
     void PrintData();
     void PageRank();
     void FindConnectedComponents();
+
+    //FLOYD WARSHALL FUNCTIONS
     void buildShortestPaths();
-    int shortestPath(Vertex source, Vertex dest); 
+    int getshortestDist(Vertex source, Vertex dest); 
+    void findPath(Vertex source, Vertex dest);
     void printFW();
-    vector<Vertex> findPath(Vertex source, Vertex dest);
+    
+
+    vector<Vertex> path_;
+    Graph g_;
 
   private:
     void DFS(Vertex visited_vertex, std::map<Vertex, bool>& visited, std::vector<Vertex>& connected);
 
-    Graph g_;
+    
     Graph g_flipped_;
     std::vector<std::map<Vertex, double>> pagerank_distr_;
     std::vector<std::vector<Vertex>> connected_components_;
+
+    //FLOYD WARSHALL VARIABLES
     std::map<Vertex, int> vertextoInt;
     int* minDist;
     int* next;
+    
 };
 
 

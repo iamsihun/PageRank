@@ -7,6 +7,34 @@ Reddit::~Reddit(){
     delete[] next;
 }
 
+void Reddit::FWParseData(const std::string& data_file) {
+    std::ifstream file(data_file);
+    std::string line;
+    std::stringstream ss;
+    while (getline(file, line)) {  
+        ss << line;
+        std::string source;
+        std::string target;
+        ss >> source >> target;
+        if (!g_.vertexExists(source)) {
+            g_.insertVertex(source);
+            g_flipped_.insertVertex(source);
+        }
+        if (!g_.vertexExists(target)) {
+            g_.insertVertex(target);
+            g_flipped_.insertVertex(target);
+        }
+        
+        if (!g_.edgeExists(source, target)) {
+            g_.insertEdge(source, target);
+            g_.setEdgeWeight(source, target, 1); 
+            g_flipped_.insertEdge(target, source);
+        } 
+        
+        ss.str(std::string()); // clears the stringstream
+    }
+    file.close();
+}
 
 void Reddit::ParseData(const std::string& data_file) {
     std::ifstream file(data_file);
@@ -112,6 +140,7 @@ void Reddit::PrintData() {
     }
 }
 
+
 void Reddit::printFW() {
     int numVertices = (int)g_.getVertices().size();
     for(Vertex i : g_.getVertices()) {
@@ -179,39 +208,39 @@ void Reddit::buildShortestPaths() {
 }
 
 
-int Reddit::shortestPath(Vertex source, Vertex dest) {
+int Reddit::getshortestDist(Vertex source, Vertex dest) {
     int numVertices = (int)g_.getVertices().size(); 
     int input_source = vertextoInt[source];
     int input_dest = vertextoInt[dest];
     return minDist[numVertices*input_source + input_dest];
 }
 
+void Reddit::findPath(Vertex source, Vertex dest) {
+    int numVertices = (int)g_.getVertices().size(); //number of vertices in graph g_
+    int i=0; 
+    int j=0;
+    while(source != g_.getVertices()[i]) {
+        if(i == numVertices - 1) break;
+        i++;
+    }
 
-vector<Vertex> Reddit::findPath(Vertex source, Vertex dest) {
-    vector<Vertex> path_;
-    path_.clear();
-    int numVertices = (int)g_.getVertices().size(); 
-    int u = vertextoInt[source];
-    int v = vertextoInt[dest];
+    while(dest != g_.getVertices()[j]) {
+        if(j == numVertices - 1) break;
+        j++;
+    }
+
+
+    int u = vertextoInt[g_.getVertices()[i]];
+    int v = vertextoInt[g_.getVertices()[j]];
     if(next[u*numVertices+v] == -1) {
-        return path_;
+        path_.clear();
     }
     while(u != v) {
         u = next[u*numVertices+v];
         path_.push_back(g_.getVertices()[u]);
     }
-    return path_; 
 }
 
-
-/* procedure Path(u, v)
-    if next[u][v] = null then
-        return []
-    path = [u]
-    while u ≠ v
-        u ← next[u][v]
-        path.append(u)
-    return path */
 
 
 }//EOF
