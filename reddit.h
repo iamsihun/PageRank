@@ -32,7 +32,23 @@ class Reddit {
      */
     void pagerank();
 
+    /**
+     * Returns the graph created by parseData()
+     */
+    const Graph& getGraph();
 
+    /**
+     * Returns the connected components created by findConnectedComponents(),
+     * which is called by pagerank().
+     * @return a vector of vectors containing the nodes in each component
+     */
+    const std::vector<std::vector<Vertex>>& getConnectedComponents();
+
+    /**
+     * Returns the pagerank distribution created by pagerank().
+     * @return a vector of maps mapping each vertex to its probability
+     */
+    const std::vector<std::map<Vertex, double>>& getPagerankDistr();
 
     //FLOYD WARSHALL FUNCTIONS
     /**

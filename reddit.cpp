@@ -268,4 +268,13 @@ void Reddit::printInputPath(const Vertex& start, const Vertex& dest) {
     cout<<'\n'<< '\n' <<endl;
     path_.clear();
 }
+
+const Graph& Reddit::getGraph() {
+    return g_;
+}
+
+const std::vector<std::vector<Vertex>>& Reddit::getConnectedComponents() {
+    return connected_components_;
+}
+
 }//EOF
