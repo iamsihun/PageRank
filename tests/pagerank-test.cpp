@@ -1,5 +1,6 @@
 #include "../cs225/catch/catch.hpp"
 #include "../reddit.h"
+#include <math.h>
 
 using namespace reddit;
 
@@ -67,11 +68,66 @@ TEST_CASE("Dangling nodes are properly handled", "[pagerank]") {
 }
 
 TEST_CASE("Pagerank algorithm is correct on one graph", "[pagerank]") {
+    double tolerance = 0.00001;
     Reddit r;
     r.parseData("data/one_connected.tsv");
     r.pagerank();
     std::map<Vertex, double> actual = {{"inlandempire", 0.475}, {"leagueoflegends", 0.333333}, {"teamredditteams", 0.191667}};
     std::map<Vertex, double> pagerank = r.getPagerankDistr()[0]; // the distribution only has 1 map in the vector
 
-    REQUIRE(actual == pagerank);
+    for (auto& vertex : pagerank) {
+        REQUIRE(fabs(actual[vertex.first] - vertex.second) <= tolerance);
+    }
+}
+
+TEST_CASE("Pagerank algorithm is correct on graph with dangling node", "[pagerank]") {
+    double tolerance = 0.0001;
+    Reddit r;
+    r.parseData("data/dangling.tsv");
+    r.pagerank();
+    std::map<Vertex, double> actual = {
+        {"cfb", 0.09948},
+        {"dogecoin", 0.2209},
+        {"dogemarket", 0.2209},
+        {"fakereddit", 0.07925},
+        {"gamedev", 0.1602},
+        {"nfl", 0.07925},
+        {"playmygame", 0.13997}
+    };
+
+    std::map<Vertex, double> pagerank = r.getPagerankDistr()[0]; // the distribution only has 1 map in the vector
+
+    for (auto& vertex : pagerank) {
+        REQUIRE(fabs(actual[vertex.first] - vertex.second) <= tolerance);
+    }
+}
+
+TEST_CASE("Pagerank algorithm works on multiple connected components", "[pagerank]") {
+        double tolerance = 0.0001;
+    Reddit r;
+    r.parseData("data/mult_connected.tsv");
+    r.pagerank();
+    std::vector<std::map<Vertex, double>> actual = {
+        {
+            {"cfb", 0.09948},
+            {"dogecoin", 0.2209},
+            {"dogemarket", 0.2209},
+            {"fakereddit", 0.07925},
+            {"gamedev", 0.1602},
+            {"nfl", 0.07925},
+            {"playmygame", 0.13997}
+        },
+        {
+            {"inlandempire", 0.475}, 
+            {"leagueoflegends", 0.333333}, 
+            {"teamredditteams", 0.191667}
+        }
+    };
+
+    std::vector<std::map<Vertex, double>> pagerank = r.getPagerankDistr(); // the distribution only has 1 map in the vector
+    for (unsigned int i = 0; i < pagerank.size(); i++) {
+        for (auto& vertex : pagerank[i]) {
+            REQUIRE(fabs(actual[i][vertex.first] - vertex.second) <= tolerance);
+        }
+    }
 }

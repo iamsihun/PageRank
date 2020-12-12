@@ -8,19 +8,18 @@ int main() {
   Reddit r;
   r.parseData("data/data1000.tsv");
 
-  cout<<'\n'<<endl;
+  cout << '\n' << endl;
 
   string start;
   string dest;
 
-  while(1){
+  while (1) {
+    cout << "Enter starting subreddit: ";
+    cin >> start;
+    cout << "Enter ending subreddit: ";
+    cin >> dest;
 
-  cout << "Enter starting subreddit: ";
-  cin >> start;
-  cout << "Enter ending subreddit: ";
-  cin >> dest;
-
-  r.printInputPath(start, dest);
+    r.printInputPath(start, dest);
   }
-return 0;
+  return 0;
 }

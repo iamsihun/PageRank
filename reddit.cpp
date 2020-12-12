@@ -85,7 +85,6 @@ void Reddit::handleDanglingNodes() {
 void Reddit::pagerank() {
     findConnectedComponents();
     handleDanglingNodes();
-
     double d = 0.85; // initialize the damping factor
     // initialize the distributions to 1 / # vertices in component
     std::vector<std::map<Vertex, double>> init_distr;
@@ -100,6 +99,7 @@ void Reddit::pagerank() {
         pagerank_distr_.push_back(pagerank_map);
     }
 
+    // perform the pagerank algorithm for each component
     for (unsigned int i = 0; i < connected_components_.size(); i++) {
         for (auto& vertex : connected_components_[i]) {
             for (auto& source : g_flipped_.getAdjacent(vertex)) { // gets all vertices pointing TO vertex
@@ -137,11 +137,11 @@ void Reddit::printData() {
 
 void Reddit::printFW() {
     buildShortestPaths();
-    int numVertices = (int)g_.getVertices().size();
-    for(Vertex i : g_.getVertices()) {
-            for(Vertex j : g_.getVertices()) {
+    int numVertices = (int) g_.getVertices().size();
+    for (Vertex i : g_.getVertices()) {
+            for (Vertex j : g_.getVertices()) {
                     cout << i << "->" << j << endl;
-                    if(minDist[vertextoInt[i]*numVertices+vertextoInt[j]] == 999999999) {
+                    if (minDist[vertextoInt[i]*numVertices+vertextoInt[j]] == MAX_INPUT) {
                         cout << "           no path" << endl;
                     }
                     else cout << "       " << minDist[vertextoInt[i]*numVertices+vertextoInt[j]] << endl;
@@ -155,8 +155,8 @@ void Reddit::buildShortestPaths() {
     next = new int[numVertices*numVertices];
 
     //  INITIALIZING minDist & next
-    for(int i=0; i < numVertices*numVertices; i++) { 
-        minDist[i] = 999999999;                         //init each dist to infinity according to FW algorithm
+    for (int i=0; i < numVertices*numVertices; i++) { 
+        minDist[i] = MAX_INPUT;                         //init each dist to infinity according to FW algorithm
         next[i] = -1;                                   //init each value to null (-1 in this case) according to FW algorithm
     }
 
@@ -217,17 +217,17 @@ void Reddit::findPath(const Vertex& source, const Vertex& dest) {
         i++;
     }
 
-    while(dest != g_.getVertices()[j]) {
-        if(j == numVertices - 1) break;
+    while (dest != g_.getVertices()[j]) {
+        if (j == numVertices - 1) break;
         j++;
     }
 
     int u = vertextoInt[g_.getVertices()[i]];
     int v = vertextoInt[g_.getVertices()[j]];
-    if(next[u*numVertices+v] == -1) {
+    if (next[u*numVertices+v] == -1) {
         path_.clear();
     }
-    while(u != v) {
+    while (u != v) {
         u = next[u*numVertices+v];
         path_.push_back(g_.getVertices()[u]);
     }
@@ -237,7 +237,7 @@ void Reddit::printInputPath(const Vertex& start, const Vertex& dest) {
     buildShortestPaths();
     cout << '\n' << '\n' << endl;
     int numVertices = (int) g_.getVertices().size();
-    if(minDist[vertextoInt[start]*numVertices+vertextoInt[dest]] == 999999999) {
+    if (minDist[vertextoInt[start]*numVertices+vertextoInt[dest]] == MAX_INPUT) {
         cout << "no path found" << endl;
         cout << '\n' << '\n' << endl;
         return;
