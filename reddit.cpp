@@ -236,6 +236,12 @@ void Reddit::findPath(const Vertex& source, const Vertex& dest) {
 void Reddit::printInputPath(const Vertex& start, const Vertex& dest) {
     buildShortestPaths();
     cout << '\n' << '\n' << endl;
+    int numVertices = (int) g_.getVertices().size();
+    if(minDist[vertextoInt[start]*numVertices+vertextoInt[dest]] == 999999999) {
+        cout << "no path found" << endl;
+        cout << '\n' << '\n' << endl;
+        return;
+    }
     cout << "START:   " << start << " ->" << endl;
     findPath (start, dest);
     int pathLength = path_.size();    
@@ -260,5 +266,6 @@ void Reddit::printInputPath(const Vertex& start, const Vertex& dest) {
     cout << "LENGTH: " << getshortestDist(start, dest) << " subreddits" << endl;
 
     cout<<'\n'<< '\n' <<endl;
+    path_.clear();
 }
 }//EOF
