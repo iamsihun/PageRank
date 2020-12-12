@@ -8,10 +8,10 @@ using namespace reddit;
 int main() {
   // These lines use the Reddit class to parse through the data
   Reddit r;
-  r.ParseData("data/data1000.tsv");
-  //r.FindConnectedComponents();
-  //r.PageRank();
-  // r.PrintData();
+  r.parseData("data/mult_connected.tsv");
+  r.findConnectedComponents();
+  r.pageRank();
+  // r.printData();
 
 
   return 0;

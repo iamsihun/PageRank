@@ -3,8 +3,12 @@
 namespace reddit {
 
 Reddit::~Reddit(){
-    delete[] minDist;
-    delete[] next;
+    if (minDist != NULL) {
+        delete[] minDist;
+    }
+    if (next != NULL) {
+        delete[] next;
+    }
 }
 
 void Reddit::FWParseData(const std::string& data_file) {
@@ -36,7 +40,7 @@ void Reddit::FWParseData(const std::string& data_file) {
     file.close();
 }
 
-void Reddit::ParseData(const std::string& data_file) {
+void Reddit::parseData(const std::string& data_file) {
     std::ifstream file(data_file);
     std::string line;
     std::stringstream ss;
@@ -66,7 +70,7 @@ void Reddit::ParseData(const std::string& data_file) {
     file.close();
 }
 
-void Reddit::FindConnectedComponents() {
+void Reddit::findConnectedComponents() {
     std::map<Vertex, bool> visited;
     for (auto& vertex : g_.getVertices()) {
         visited[vertex] = false;
@@ -95,7 +99,8 @@ void Reddit::DFS(Vertex visited_vertex, std::map<Vertex, bool>& visited, std::ve
     }
 }
 
-void Reddit::PageRank() {
+void Reddit::pageRank() {
+    double d = 0.85; // initialize the damping factor
     // initialize the distributions to 1 / # vertices in component
     std::vector<std::map<Vertex, double>> init_distr;
     for (auto& comp : connected_components_) {
@@ -112,10 +117,17 @@ void Reddit::PageRank() {
     for (unsigned int i = 0; i < connected_components_.size(); i++) {
         for (auto& vertex : connected_components_[i]) {
             for (auto& source : g_flipped_.getAdjacent(vertex)) { // gets all vertices pointing TO vertex
-                pagerank_distr_[i][vertex] += init_distr[i][source] / g_.getAdjacent(source).size();
+                int num_adj = g_.getAdjacent(source).size();
+                if (num_adj == 0) {
+                    num_adj = connected_components_[i].size() - 1; // if a subreddit has no outbound links, 
+                                                               // assume it points to all other nodes
+                }
+                pagerank_distr_[i][vertex] += init_distr[i][source] / num_adj;
                 // adds the initial probabiliity of each source pointing to vertex divided by
                 // the number of vertices that source points to
             }
+            // add in the damping factor to deal with dangling nodes
+            pagerank_distr_[i][vertex] = ((1 - d) / connected_components_[i].size()) + d * pagerank_distr_[i][vertex];
         }
     }
 
@@ -130,7 +142,7 @@ void Reddit::PageRank() {
     }
 }
 
-void Reddit::PrintData() {
+void Reddit::printData() {
     for (unsigned int i = 0; i < connected_components_.size(); i++) {
         std::cout << i << std::endl;
         for (auto& comp : connected_components_[i]) {
@@ -158,7 +170,7 @@ void Reddit::buildShortestPaths() {
     next = new int[numVertices*numVertices];
 
     //  INITIALIZING minDist & next
-    for(int i=0; i<numVertices*numVertices; i++) { 
+    for(int i=0; i < numVertices*numVertices; i++) { 
         minDist[i] = 999999999;                         //init each dist to infinity according to FW algorithm
         next[i] = -1;                                   //init each value to null (-1 in this case) according to FW algorithm
     }

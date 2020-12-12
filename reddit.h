@@ -21,11 +21,11 @@ class Reddit {
      */
 
     ~Reddit();
-    void ParseData(const std::string& data_file);
+    void parseData(const std::string& data_file);
     void FWParseData(const std::string& data_file);
-    void PrintData();
-    void PageRank();
-    void FindConnectedComponents();
+    void printData();
+    void pageRank();
+    void findConnectedComponents();
 
     //FLOYD WARSHALL FUNCTIONS
     void buildShortestPaths();
