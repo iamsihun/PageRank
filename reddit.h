@@ -32,8 +32,18 @@ class Reddit {
      */
     void pagerank();
 
+
+
     //FLOYD WARSHALL FUNCTIONS
+    /**
+     * Prints path taken between two user-inputted subreddits
+     */
     void printInputPath(const Vertex& start, const Vertex& dest);
+
+    /**
+     * Prints the floyd-warshall algorithm of calculating the shortest path between
+     * every pair of nodes
+     */
     void printFW();
 
   private:
@@ -56,9 +66,21 @@ class Reddit {
      */
     void handleDanglingNodes();
 
+
     // FLOYD-WARSHALL HELPER METHODS
+    /**
+    * Calculates all the shortest path between every pair of nodes
+    */
     void buildShortestPaths();
+
+    /**
+     * Helper function for buildShortestPaths()
+     */
     int getshortestDist(const Vertex& source, const Vertex& dest); 
+
+    /**
+     * Obtains shortest path between two user-inputted subreddits
+     */    
     void findPath(const Vertex& source, const Vertex& dest);
     
     vector<Vertex> path_;

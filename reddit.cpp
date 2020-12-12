@@ -238,7 +238,7 @@ void Reddit::printInputPath(const Vertex& start, const Vertex& dest) {
     cout << '\n' << '\n' << endl;
     cout << "START:   " << start << " ->" << endl;
     findPath (start, dest);
-    int pathLength = path_.size();
+    int pathLength = path_.size();    
     if (!path_.empty()) {
         for(int i = 0; i < pathLength; i++) {
             if (i == pathLength - 1) {

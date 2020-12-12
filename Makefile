@@ -3,33 +3,35 @@ CXXFLAGS = -std=c++1y -stdlib=libc++ -c -g -O0 -Wall -Wextra -pedantic
 LD = clang++
 LDFLAGS = -std=c++1y -stdlib=libc++ -lc++abi -lm
 
-all: fw_test1 fw_test2 fw_test3 printfw fwpath pagerank 
+all: fw pagerank 
 
-fw_test1 : fw_test1.o reddit.o graph.o
+fw: fw_test1 fw_test2 fw_test3 printfw fwpath
+
+fw_test1 : fw_test1.o reddit.o graph.o 
 	$(LD) fw_test1.o reddit.o graph.o $(LDFLAGS) -o fw_test1
 
-fw_test2 : fw_test2.o reddit.o graph.o
+fw_test2 : fw_test2.o 
 	$(LD) fw_test2.o reddit.o graph.o $(LDFLAGS) -o fw_test2
 
-fw_test3 : fw_test3.o reddit.o graph.o
+fw_test3 : fw_test3.o 
 	$(LD) fw_test3.o reddit.o graph.o $(LDFLAGS) -o fw_test3
 
-printfw : printfw.o reddit.o graph.o
+printfw : printfw.o 
 	$(LD) printfw.o reddit.o graph.o $(LDFLAGS) -o printfw
 
-fwpath : fwpath.o reddit.o graph.o
+fwpath : fwpath.o 
 	$(LD) fwpath.o reddit.o graph.o $(LDFLAGS) -o fwpath
 
 pagerank : pagerank.o reddit.o graph.o
 	$(LD) pagerank.o reddit.o graph.o $(LDFLAGS) -o pagerank
 
-fw_test1.o : fw_test1.cpp
+fw_test1.o : fw_test1.cpp data/FW_test1.tsv
 	$(CXX) $(CXXFLAGS) fw_test1.cpp
 
-fw_test2.o : fw_test2.cpp
+fw_test2.o : fw_test2.cpp data/FW_test2.tsv
 	$(CXX) $(CXXFLAGS) fw_test2.cpp
 
-fw_test3.o : fw_test3.cpp
+fw_test3.o : fw_test3.cpp data/FW_test3.tsv
 	$(CXX) $(CXXFLAGS) fw_test3.cpp
 
 printfw.o : printfw.cpp
