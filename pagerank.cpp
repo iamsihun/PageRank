@@ -9,10 +9,8 @@ int main() {
   // These lines use the Reddit class to parse through the data
   Reddit r;
   r.parseData("data/mult_connected.tsv");
-  r.findConnectedComponents();
-  r.pageRank();
+  r.pagerank();
   // r.printData();
-
 
   return 0;
 }

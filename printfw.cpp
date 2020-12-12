@@ -6,8 +6,7 @@ using namespace reddit;
 
 int main() {     
   Reddit r;
-  r.FWParseData("data/mult_connected.tsv");
-  r.buildShortestPaths();
+  r.parseData("data/mult_connected.tsv");
   r.printFW();
   return 0;
 }

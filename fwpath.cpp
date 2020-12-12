@@ -6,8 +6,7 @@ using namespace reddit;
 
 int main() {     
   Reddit r;
-  r.FWParseData("data/mult_connected.tsv");
-  r.buildShortestPaths();
+  r.parseData("data/mult_connected.tsv");
 
   cout<<'\n'<<endl;
 
@@ -21,36 +20,7 @@ int main() {
   cout << "Enter ending subreddit: ";
   cin >> dest;
 
-  cout<<'\n'<< '\n' <<endl;
-  
-  cout << "START:   " << start << "->" << endl;
-  r.findPath(start, dest);
-  int pathLength = r.path_.size();
-  if(!r.path_.empty()) {
-      for(int i=0; i<pathLength; i++) {
-          if(i==pathLength-1) {
-              cout << "END:     " << r.path_[i] << endl;
-              break;
-          } 
-          cout << "              " << r.path_[i] << "->" << endl;
-    }
+  r.printInputPath(start, dest);
   }
-  else {
-      if(start == dest) {
-          cout << "path to itself" << endl;
-          return 0;
-      }
-      cout << "no path found" << endl;
-      return 0;
-  }
-
-      cout<<'\n'<< '\n' <<endl;
-      cout << "LENGTH: " << r.getshortestDist(start, dest) << " subreddits" << endl;
-
-      cout<<'\n'<< '\n' <<endl;
-
-  }
-
-    return 0;
-  
+return 0;
 }

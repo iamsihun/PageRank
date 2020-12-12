@@ -5,7 +5,7 @@ using namespace reddit;
 
 int main() {
     Reddit r;
-  r.FWParseData("data/FW_test2.tsv");
+  r.parseData("data/FW_test2.tsv");
   r.buildShortestPaths();
   r.printFW();
 

@@ -11,7 +11,7 @@ Reddit::~Reddit(){
     }
 }
 
-void Reddit::FWParseData(const std::string& data_file) {
+void Reddit::parseData(const std::string& data_file) {
     std::ifstream file(data_file);
     std::string line;
     std::stringstream ss;
@@ -40,36 +40,6 @@ void Reddit::FWParseData(const std::string& data_file) {
     file.close();
 }
 
-void Reddit::parseData(const std::string& data_file) {
-    std::ifstream file(data_file);
-    std::string line;
-    std::stringstream ss;
-    while (getline(file, line)) {  
-        ss << line;
-        std::string source;
-        std::string target;
-        ss >> source >> target;
-        if (!g_.vertexExists(source)) {
-            g_.insertVertex(source);
-            g_flipped_.insertVertex(source);
-        }
-        if (!g_.vertexExists(target)) {
-            g_.insertVertex(target);
-            g_flipped_.insertVertex(target);
-        }
-        
-        if (!g_.edgeExists(source, target)) {
-            g_.insertEdge(source, target);
-            g_.setEdgeWeight(source, target, 1); 
-            g_flipped_.insertEdge(target, source);
-        } else {
-            g_.setEdgeWeight(source, target, g_.getEdgeWeight(source, target) + 1);
-        }
-        ss.str(std::string()); // clears the stringstream
-    }
-    file.close();
-}
-
 void Reddit::findConnectedComponents() {
     std::map<Vertex, bool> visited;
     for (auto& vertex : g_.getVertices()) {
@@ -84,7 +54,7 @@ void Reddit::findConnectedComponents() {
     }
 }
 
-void Reddit::DFS(Vertex visited_vertex, std::map<Vertex, bool>& visited, std::vector<Vertex>& connected) {
+void Reddit::DFS(const Vertex& visited_vertex, std::map<Vertex, bool>& visited, std::vector<Vertex>& connected) {
     visited[visited_vertex] = true;
     connected.push_back(visited_vertex);
     for (auto& adj : g_.getAdjacent(visited_vertex)) {
@@ -99,7 +69,23 @@ void Reddit::DFS(Vertex visited_vertex, std::map<Vertex, bool>& visited, std::ve
     }
 }
 
-void Reddit::pageRank() {
+void Reddit::handleDanglingNodes() {
+    for (auto& comp : connected_components_) {
+        for (auto& vertex : comp) {
+            if (g_.getAdjacent(vertex).empty()) {
+                for (auto& node : comp) {
+                    g_.insertEdge(vertex, node);
+                    g_flipped_.insertEdge(node, vertex);
+                }
+            }
+        }
+    }
+}
+
+void Reddit::pagerank() {
+    findConnectedComponents();
+    handleDanglingNodes();
+
     double d = 0.85; // initialize the damping factor
     // initialize the distributions to 1 / # vertices in component
     std::vector<std::map<Vertex, double>> init_distr;
@@ -118,10 +104,6 @@ void Reddit::pageRank() {
         for (auto& vertex : connected_components_[i]) {
             for (auto& source : g_flipped_.getAdjacent(vertex)) { // gets all vertices pointing TO vertex
                 int num_adj = g_.getAdjacent(source).size();
-                if (num_adj == 0) {
-                    num_adj = connected_components_[i].size() - 1; // if a subreddit has no outbound links, 
-                                                               // assume it points to all other nodes
-                }
                 pagerank_distr_[i][vertex] += init_distr[i][source] / num_adj;
                 // adds the initial probabiliity of each source pointing to vertex divided by
                 // the number of vertices that source points to
@@ -131,14 +113,15 @@ void Reddit::pageRank() {
         }
     }
 
+    // print out the distributions for each component
     for (unsigned int i = 0; i < pagerank_distr_.size(); i++) {
         std::cout << "component: " << i << std::endl;
         double total = 0.0;
         for (auto& vertex : pagerank_distr_[i]) {
-            std::cout << vertex.first << " " << vertex.second << std::endl;
+            std::cout << vertex.first << ": " << vertex.second << std::endl;
             total += vertex.second;
         }
-        std::cout << total << std::endl;
+        std::cout << "total: " << total << "\n" << std::endl;
     }
 }
 
@@ -152,8 +135,8 @@ void Reddit::printData() {
     }
 }
 
-
 void Reddit::printFW() {
+    buildShortestPaths();
     int numVertices = (int)g_.getVertices().size();
     for(Vertex i : g_.getVertices()) {
             for(Vertex j : g_.getVertices()) {
@@ -165,8 +148,6 @@ void Reddit::printFW() {
             }
     }
 }
-
-
 
 void Reddit::buildShortestPaths() {
     int numVertices = (int)g_.getVertices().size();  //get num of vertices
@@ -218,25 +199,21 @@ void Reddit::buildShortestPaths() {
 /*                 if dist[i][j] > dist[i][k] + dist[k][j] then
                     dist[i][j] ← dist[i][k] + dist[k][j]
                     next[i][j] ← next[i][k] */
-
-
-
 }
 
-
-int Reddit::getshortestDist(Vertex source, Vertex dest) {
+int Reddit::getshortestDist(const Vertex& source, const Vertex& dest) {
     int numVertices = (int)g_.getVertices().size(); 
     int input_source = vertextoInt[source];
     int input_dest = vertextoInt[dest];
     return minDist[numVertices*input_source + input_dest];
 }
 
-void Reddit::findPath(Vertex source, Vertex dest) {
-    int numVertices = (int)g_.getVertices().size(); //number of vertices in graph g_
-    int i=0; 
-    int j=0;
-    while(source != g_.getVertices()[i]) {
-        if(i == numVertices - 1) break;
+void Reddit::findPath(const Vertex& source, const Vertex& dest) {
+    int numVertices = (int) g_.getVertices().size(); //number of vertices in graph g_
+    int i = 0; 
+    int j = 0;
+    while (source != g_.getVertices()[i]) {
+        if (i == numVertices - 1) break;
         i++;
     }
 
@@ -244,7 +221,6 @@ void Reddit::findPath(Vertex source, Vertex dest) {
         if(j == numVertices - 1) break;
         j++;
     }
-
 
     int u = vertextoInt[g_.getVertices()[i]];
     int v = vertextoInt[g_.getVertices()[j]];
@@ -257,6 +233,32 @@ void Reddit::findPath(Vertex source, Vertex dest) {
     }
 }
 
+void Reddit::printInputPath(const Vertex& start, const Vertex& dest) {
+    buildShortestPaths();
+    cout << '\n' << '\n' << endl;
+    cout << "START:   " << start << " ->" << endl;
+    findPath (start, dest);
+    int pathLength = path_.size();
+    if (!path_.empty()) {
+        for(int i = 0; i < pathLength; i++) {
+            if (i == pathLength - 1) {
+                cout << "END:     " << path_[i] << endl;
+                break;
+            } 
+            cout << "              " << path_[i] << " ->" << endl;
+        }
+    } else {
+        if (start == dest) {
+            cout << "path to itself" << endl;
+            return;
+        }
+        cout << "no path found" << endl;
+        return;
+    }
 
+    cout<<'\n'<< '\n' <<endl;
+    cout << "LENGTH: " << getshortestDist(start, dest) << " subreddits" << endl;
 
+    cout<<'\n'<< '\n' <<endl;
+}
 }//EOF
