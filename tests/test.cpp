@@ -131,3 +131,27 @@ TEST_CASE("Pagerank algorithm works on multiple connected components", "[pageran
         }
     }
 }
+
+TEST_CASE("Floyd Warshall gets the shortest path 1", "[fw]") {
+    Reddit r;
+    r.parseData("data/FW_test1.tsv");
+    r.printInputPath("A", "D");
+    std::vector<Vertex> actual = {"B", "C", "D"};
+    REQUIRE(r.getPath() == actual);
+}
+
+TEST_CASE("Floyd Warshall gets the shortest path 2", "[fw]") {
+    Reddit r;
+    r.parseData("data/FW_test2.tsv");
+    r.printInputPath("A", "D");
+    std::vector<Vertex> actual = {"D"};
+    REQUIRE(r.getPath() == actual);
+}
+
+TEST_CASE("Floyd Warshall gets the shortest path 3", "[fw]") {
+    Reddit r;
+    r.parseData("data/FW_test3.tsv");
+    r.printInputPath("E", "G");
+    std::vector<Vertex> actual = {"C", "F", "G"};
+    REQUIRE(r.getPath() == actual);
+}

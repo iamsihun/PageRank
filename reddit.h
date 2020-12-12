@@ -53,6 +53,8 @@ class Reddit {
     //FLOYD WARSHALL FUNCTIONS
     /**
      * Prints path taken between two user-inputted subreddits
+     * @param start starting vertex
+     * @param dest ending vertex
      */
     void printInputPath(const Vertex& start, const Vertex& dest);
 
@@ -61,6 +63,13 @@ class Reddit {
      * every pair of nodes
      */
     void printFW();
+
+    /**
+     * Returns the path created by printInputPath().
+     * If called after printFW(), returns the path between the last pair of nodes.
+     * @return a vector storing the vertices from start to end
+     */
+    const vector<Vertex>& getPath();
 
   private:
 
@@ -73,6 +82,9 @@ class Reddit {
 
     /**
      * Helper method for findConnectedComponents() that uses DFS to traverse through the graph.
+     * @param visited_vertex current visited vertex
+     * @param visted map storing whether each vertex has been visited
+     * @param connected vector storing vertices in one connected component
      */
     void DFS(const Vertex& visited_vertex, std::map<Vertex, bool>& visited, std::vector<Vertex>& connected);
 
@@ -82,7 +94,6 @@ class Reddit {
      */
     void handleDanglingNodes();
 
-
     // FLOYD-WARSHALL HELPER METHODS
     /**
     * Calculates all the shortest path between every pair of nodes
@@ -90,18 +101,22 @@ class Reddit {
     void buildShortestPaths();
 
     /**
-     * Helper function for buildShortestPaths()
+     * Helper function for buildShortestPaths() that gets the shortest distance between two nodes
+     * @param source starting vertex
+     * @param dest ending vertex
      */
     int getshortestDist(const Vertex& source, const Vertex& dest); 
 
     /**
      * Obtains shortest path between two user-inputted subreddits
+     * @param source starting vertex
+     * @param dest ending vertex
      */    
     void findPath(const Vertex& source, const Vertex& dest);
     
-    vector<Vertex> path_;
+    vector<Vertex> path_; // stores shortest path from starting vertex to end
     Graph g_;
-    Graph g_flipped_;
+    Graph g_flipped_; // stores a flipped version of the actual graph in order to easily get vertices pointing TO a certain vertex
     std::vector<std::map<Vertex, double>> pagerank_distr_;
     std::vector<std::vector<Vertex>> connected_components_;
 

@@ -234,6 +234,7 @@ void Reddit::findPath(const Vertex& source, const Vertex& dest) {
 }
 
 void Reddit::printInputPath(const Vertex& start, const Vertex& dest) {
+    path_.clear();
     buildShortestPaths();
     cout << '\n' << '\n' << endl;
     int numVertices = (int) g_.getVertices().size();
@@ -243,7 +244,7 @@ void Reddit::printInputPath(const Vertex& start, const Vertex& dest) {
         return;
     }
     cout << "START:   " << start << " ->" << endl;
-    findPath (start, dest);
+    findPath(start, dest);
     int pathLength = path_.size();    
     if (!path_.empty()) {
         for(int i = 0; i < pathLength; i++) {
@@ -266,7 +267,6 @@ void Reddit::printInputPath(const Vertex& start, const Vertex& dest) {
     cout << "LENGTH: " << getshortestDist(start, dest) << " subreddits" << endl;
 
     cout<<'\n'<< '\n' <<endl;
-    path_.clear();
 }
 
 const Graph& Reddit::getGraph() {
@@ -281,4 +281,7 @@ const std::vector<std::map<Vertex, double>>& Reddit::getPagerankDistr() {
     return pagerank_distr_;
 }
 
+const vector<Vertex>& Reddit::getPath() {
+    return path_;
+}
 }//EOF
