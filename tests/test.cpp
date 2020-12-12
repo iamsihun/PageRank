@@ -75,9 +75,12 @@ TEST_CASE("Pagerank algorithm is correct on one graph", "[pagerank]") {
     std::map<Vertex, double> actual = {{"inlandempire", 0.475}, {"leagueoflegends", 0.333333}, {"teamredditteams", 0.191667}};
     std::map<Vertex, double> pagerank = r.getPagerankDistr()[0]; // the distribution only has 1 map in the vector
 
+    double total = 0.0;
     for (auto& vertex : pagerank) {
         REQUIRE(fabs(actual[vertex.first] - vertex.second) <= tolerance);
+        total += vertex.second;
     }
+    REQUIRE(total - 1.0 < 0.00001);
 }
 
 TEST_CASE("Pagerank algorithm is correct on graph with dangling node", "[pagerank]") {
@@ -96,10 +99,12 @@ TEST_CASE("Pagerank algorithm is correct on graph with dangling node", "[pageran
     };
 
     std::map<Vertex, double> pagerank = r.getPagerankDistr()[0]; // the distribution only has 1 map in the vector
-
+    double total = 0.0;
     for (auto& vertex : pagerank) {
         REQUIRE(fabs(actual[vertex.first] - vertex.second) <= tolerance);
+        total += vertex.second;
     }
+    REQUIRE(total - 1.0 < 0.00001);
 }
 
 TEST_CASE("Pagerank algorithm works on multiple connected components", "[pagerank]") {
@@ -126,9 +131,12 @@ TEST_CASE("Pagerank algorithm works on multiple connected components", "[pageran
 
     std::vector<std::map<Vertex, double>> pagerank = r.getPagerankDistr(); // the distribution only has 1 map in the vector
     for (unsigned int i = 0; i < pagerank.size(); i++) {
+        double total = 0.0;
         for (auto& vertex : pagerank[i]) {
             REQUIRE(fabs(actual[i][vertex.first] - vertex.second) <= tolerance);
+            total += vertex.second;
         }
+        REQUIRE(total - 1.0 < 0.00001);
     }
 }
 

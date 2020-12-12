@@ -7,7 +7,7 @@ using namespace reddit;
 
 int main() {
   Reddit r;
-  r.parseData("data/mult_connected.tsv");
+  r.parseData("data/data1000.tsv");
   r.pagerank();
   // r.printData();
 

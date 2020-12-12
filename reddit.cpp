@@ -116,12 +116,9 @@ void Reddit::pagerank() {
     // print out the distributions for each component
     for (unsigned int i = 0; i < pagerank_distr_.size(); i++) {
         std::cout << "component: " << i << std::endl;
-        double total = 0.0;
         for (auto& vertex : pagerank_distr_[i]) {
             std::cout << vertex.first << ": " << vertex.second << std::endl;
-            total += vertex.second;
         }
-        std::cout << "total: " << total << "\n" << std::endl;
     }
 }
 
