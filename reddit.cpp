@@ -146,10 +146,14 @@ void Reddit::printFW() {
     for(Vertex i : g_.getVertices()) {
             for(Vertex j : g_.getVertices()) {
                     cout << i << "->" << j << endl;
-                    cout << "       " << minDist[vertextoInt[i]*numVertices+vertextoInt[j]] << endl;
+                    if(minDist[vertextoInt[i]*numVertices+vertextoInt[j]] == 999999999) {
+                        cout << "           no path" << endl;
+                    }
+                    else cout << "       " << minDist[vertextoInt[i]*numVertices+vertextoInt[j]] << endl;
             }
     }
 }
+
 
 
 void Reddit::buildShortestPaths() {
