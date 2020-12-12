@@ -53,14 +53,14 @@ fwpath : fwpath.o
 pagerank : pagerank.o reddit.o graph.o
 	$(LD) pagerank.o reddit.o graph.o $(LDFLAGS) -o pagerank
 
-fw_test1.o : fw_test1.cpp data/FW_test1.tsv
-	$(CXX) $(CXXFLAGS) fw_test1.cpp
+fw_test1.o : tests/fw_test1.cpp data/FW_test1.tsv
+	$(CXX) $(CXXFLAGS) tests/fw_test1.cpp
 
-fw_test2.o : fw_test2.cpp data/FW_test2.tsv
-	$(CXX) $(CXXFLAGS) fw_test2.cpp
+fw_test2.o : tests/fw_test2.cpp data/FW_test2.tsv
+	$(CXX) $(CXXFLAGS) tests/fw_test2.cpp
 
-fw_test3.o : fw_test3.cpp data/FW_test3.tsv
-	$(CXX) $(CXXFLAGS) fw_test3.cpp
+fw_test3.o : tests/fw_test3.cpp data/FW_test3.tsv
+	$(CXX) $(CXXFLAGS) tests/fw_test3.cpp
 
 printfw.o : printfw.cpp
 	$(CXX) $(CXXFLAGS) printfw.cpp
@@ -85,4 +85,4 @@ pagerank-test.o : tests/pagerank-test.cpp cs225/catch/catch.hpp reddit.cpp reddi
 	$(CXX) $(CXXFLAGS) tests/pagerank-test.cpp
 
 clean :
-	rm pagerank.o reddit.o graph.o fwpath.o fw_test1.o fw_test2.o fw_test3.o printfw.o fwpath pagerank fw_test1 fw_test2 fw_test3 printfw pagerank-test.o catchmain.o
+	rm pagerank.o reddit.o graph.o fwpath.o fw_test1.o fw_test2.o fw_test3.o printfw.o fwpath pagerank fw_test1 fw_test2 fw_test3 printfw pagerank-test.o catchmain.o test
