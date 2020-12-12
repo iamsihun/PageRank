@@ -52,3 +52,26 @@ TEST_CASE("Connected components are divided correctly", "[pagerank]") {
 
     REQUIRE(connected_comp == actual_comp);
 }
+
+TEST_CASE("Dangling nodes are properly handled", "[pagerank]") {
+    Reddit r;
+    r.parseData("data/mult_connected.tsv");
+    r.pagerank();
+    Graph g = r.getGraph();
+    std::vector<Vertex> adj = g.getAdjacent("fakereddit");
+    std::vector<Vertex> all_vertices = {"playmygame", "gamedev", "dogemarket", "dogecoin", "nfl", "cfb", "fakereddit"};
+    std::sort(adj.begin(), adj.end());
+    std::sort(all_vertices.begin(), all_vertices.end());
+
+    REQUIRE(adj == all_vertices);
+}
+
+TEST_CASE("Pagerank algorithm is correct on one graph", "[pagerank]") {
+    Reddit r;
+    r.parseData("data/one_connected.tsv");
+    r.pagerank();
+    std::map<Vertex, double> actual = {{"inlandempire", 0.475}, {"leagueoflegends", 0.333333}, {"teamredditteams", 0.191667}};
+    std::map<Vertex, double> pagerank = r.getPagerankDistr()[0]; // the distribution only has 1 map in the vector
+
+    REQUIRE(actual == pagerank);
+}

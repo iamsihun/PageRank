@@ -277,4 +277,8 @@ const std::vector<std::vector<Vertex>>& Reddit::getConnectedComponents() {
     return connected_components_;
 }
 
+const std::vector<std::map<Vertex, double>>& Reddit::getPagerankDistr() {
+    return pagerank_distr_;
+}
+
 }//EOF
