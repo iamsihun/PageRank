@@ -119,6 +119,7 @@ void Reddit::pagerank() {
         for (auto& vertex : pagerank_distr_[i]) {
             std::cout << vertex.first << ": " << vertex.second << std::endl;
         }
+        std::cout << "\n";
     }
 }
 
