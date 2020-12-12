@@ -3,7 +3,7 @@ CXXFLAGS = -std=c++1y -stdlib=libc++ -c -g -O0 -Wall -Wextra -pedantic
 LD = clang++
 LDFLAGS = -std=c++1y -stdlib=libc++ -lc++abi -lm
 
-all: main fw printfw fw_test1 fw_test2 fw_test3
+all: fw_test1 fw_test2 fw_test3 printfw fwpath main 
 
 fw_test1 : fw_test1.o reddit.o graph.o
 	$(LD) fw_test1.o reddit.o graph.o $(LDFLAGS) -o fw_test1
@@ -30,10 +30,10 @@ fw_test1.o : fw_test1.cpp
 	$(CXX) $(CXXFLAGS) fw_test1.cpp
 
 fw_test2.o : fw_test2.cpp
-	$(CXX) $(CXXFLAGS) fw_test1.cpp
+	$(CXX) $(CXXFLAGS) fw_test2.cpp
 
-fw_test2.o : fw_test2.cpp
-	$(CXX) $(CXXFLAGS) fw_test1.cpp
+fw_test3.o : fw_test3.cpp
+	$(CXX) $(CXXFLAGS) fw_test3.cpp
 
 
 printfw.o : printfw.cpp
