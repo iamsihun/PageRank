@@ -1,10 +1,10 @@
-#DEMO VIDEO: https://youtu.be/Etoyz4WbSOg?t=560
-USAGE:  
+# DEMO VIDEO: https://youtu.be/Etoyz4WbSOg?t=560
+## USAGE:  
 Type 'make' in the terminal to build the program
 To run only pagerank, type 'make pagerank'.
 To run only unit tests, type 'make test'.
 
-Floyd-Warshall Usage:  
+## Floyd-Warshall Usage:  
     1. To generate and print the shortest distances between all the subreddits, type ' ./printfw ' in the terminal  
        Please allow for a couple seconds as the data set is fairly large.  
     2. The terminal will print all the pairs of subreddits and the distance between them (if there is a path).     
@@ -18,7 +18,7 @@ Floyd-Warshall Usage:
         2. Type ' ./fw_test2 ' to execute the second test case  
         3. Type ' ./fw_test3 ' to execute the third test case
 
-Pagerank Usage:
+## Pagerank Usage:
     1. To generate and print the pagerank distributions of the subreddits, type './pagerank' in the terminal.
        Please allow for a couple seconds as the data set is fairly large.
     2. The terminal will print out all of the connected components in the graph, labelling each component as "component: i" where
@@ -37,5 +37,5 @@ Pagerank Usage:
     3. You can also print out the graph by uncommenting the line 'r.printData()' inside of pagerank.cpp, or adding 'r.printData()'     
        inside any main function.
 
-Unit Testing
+## Unit Testing
     1. To run unit tests, type './test'. All the data files used in the tests are inside the data folder.
